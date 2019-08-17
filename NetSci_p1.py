@@ -18,59 +18,19 @@ def construct_Digraph():
 
     g = nx.DiGraph()
 
-
     with open("/Users/sankeerthjagini/Documents/Studies/NetSci/Project/532projectdataset.txt") as file:
-
         content = file.read().splitlines()
         numberofelems = len(content)
-
-
-
         for i in range(0, numberofelems):
-
             nodes = content[i].split()
-
             date1 = nodes[0]
             mydate = dt.datetime.fromtimestamp(int(date1))
-
             day = calendar.day_name[mydate.weekday()]
-
             if day != 'Saturday' and day != 'Sunday':
-
                 extra = 0
                 if g.has_edge(nodes[1], nodes[2]):
                     extra = g[nodes[1]][nodes[2]]['weight']
-
                 g.add_edge(nodes[1], nodes[2], weight = 1 + extra)
-
-
-            """
-            if in_str == input_str:
-                count = count + 1
-
-            else:
-                content1 = content[i-1].split()
-
-                extra = 0
-                if g.has_edge(content1[1], content1[2]):
-                    extra = g[content1[1]][content1[2]]['weight']
-
-                g.add_edge(content1[1], content1[2], weight=count+extra)
-                a = content[i].split()
-                in_str = a[1] + a[2]
-                count = 1
-
-            # eg.: last 10 elems are same or if only last elem is diff
-            if i == numberofelems-1:
-                content1 = content[i].split()
-
-                extra = 0
-                if g.has_edge(content1[1], content1[2]):
-                    extra = g[content1[1]][content1[2]]['weight']
-
-                g.add_edge(content1[1], content1[2], weight=count+extra)
-            """
-
     return g
 
 
@@ -81,29 +41,18 @@ def construct_graph():
 
     g = nx.Graph()
     with open("/Users/sankeerthjagini/Documents/Studies/NetSci/Project/532projectdataset.txt") as file:
-
         content = file.read().splitlines()
         numberofelems = len(content)
-
         for i in range(0, numberofelems):
-
             nodes = content[i].split()
-
             date1 = nodes[0]
             mydate = dt.datetime.fromtimestamp(int(date1))
-
             day = calendar.day_name[mydate.weekday()]
-
             if day != 'Saturday' and day != 'Sunday':
-
                 extra = 0
                 if g.has_edge(nodes[1], nodes[2]):
                     extra = g[nodes[1]][nodes[2]]['weight']
-
                 g.add_edge(nodes[1], nodes[2], weight = 1 + extra)
-
-    # print(g.edges())
-
     return g
 
 
@@ -130,27 +79,20 @@ def min_max_avg(g):
         degree = g.degree(i)
         if indegree > max_in:
             max_in = indegree
-
         if outdegree > max_out:
             max_out = outdegree
-
         if degree > max_t:
             max_t = degree
-
         if indegree < min_in:
             min_in = indegree
-
         if outdegree < min_out:
             min_out = outdegree
-
-        #Doubt
         if degree < min_t:
             min_t = degree
 
         ind = ind + indegree
         outd = outd + outdegree
         totd = totd + degree
-
 
     bidirectional(g)
     print("max_in: ", max_in)
@@ -175,50 +117,19 @@ def bidirectional(g):
 
 def diameter(g):
 
-    # z = nx.connected_component_subgraphs(g)
-    # connected_diam = []
-    # for i in z:
-    #     p1 = nx.shortest_path_length(i)
-    #     print("P1 calculated")
-    #     max1 = 0
-    #     print("num of nodes in subgraph: ",len(i.nodes()))
-    #     count=0
-    #
-    #     for t in p1:
-    #         print("node as key: ",t[0])
-    #
-    #
-    #
-    #     for j in p1:
-    #
-    #         if max1 < max(j[1].values()):
-    #             print("values in dict: ",len(j[1].values()))
-    #             max1 = max(j[1].values())
-    #
-    #         print(count)
-    #         count = count +1
-    #     print("max calculated")
-    #     connected_diam.append(max1)
-    #
-    # # print(connected_diam)
-    # return connected_diam
-
     z = nx.connected_component_subgraphs(g)
     connected_diam = []
 
     for i in z:
-
         max1 = 0
         nodes = list(i.nodes())
         num_nodes = len(i.nodes())
-
         # Calculating Geodesic distance
         dist = 0
         for l in range(0, num_nodes):
             for m in range(l, num_nodes):
                 # print(nodes[l])
                 # print(nodes[m])
-
                 a = 0
                 b = 0
                 if nx.has_path(i, nodes[l], nodes[m]):
@@ -229,7 +140,6 @@ def diameter(g):
                 if nx.has_path(i, nodes[m], nodes[l]):
                     b = len(nx.shortest_path(i, nodes[m], nodes[l])) - 1
                     # print(b, nodes[l], nodes[m])
-
                 c = max(a, b)
                 if max1 < c:
                     max1 = c
@@ -251,12 +161,10 @@ def plotting_helperfunc(degree_list):
         else:
             count_dictionary[u[1]] = count_dictionary[u[1]] + 1
 
-
     keys = []
     vals = []
     value = 0
 
-    # This is  wrong we should count values not value of keys
     # value_list = list(count_dictionary.keys())
     value_list = list(count_dictionary.values())
     # In Degree Distribution y-axis is Probability i.e fraction of degree, so we need total value
@@ -278,14 +186,12 @@ def plotting(g):
     plt.xscale('log')
     plt.yscale('log')
 
-
     # Plotting degree distribution and fitting corresponding least square regression line
     keys,vals = plotting_helperfunc(g.degree)
     plt.title('Degree Distribution')
     plt.xlabel('Degree')
     plt.ylabel('Fraction of nodes')
     plt.plot(keys, vals, 'b.')
-
 
     # Returns coefficient of power-law line
     logkeys = []
@@ -297,7 +203,6 @@ def plotting(g):
             logkeys.append(np.math.log10(keys[i]))
             logvals.append(np.math.log10(vals[i]))
 
-    # z = np.polyfit(v_u, e_u, 1)
     z = np.polyfit(logkeys, logvals, 1)
     # Exponent or slope of power-law
     m = z[0]
@@ -309,9 +214,6 @@ def plotting(g):
 
     # print('Exponent power-law for eigen vs weight: ', z[0])
     plt.plot(keys, y1, 'b.', label=z[0], mfc='none')
-
-
-
 
     # Plotting in-degree distribution and fitting corresponding least square regression line
     keys1, vals1 = plotting_helperfunc(g.in_degree)
@@ -342,9 +244,6 @@ def plotting(g):
     plt.plot(keys11, y1, 'g.', label=z[0], mfc='none')
 
 
-
-
-
     # Plotting out-degree distribution and fitting corresponding least square regression line
     keys2, vals2 = plotting_helperfunc(g.out_degree)
     plt.plot(keys2, vals2, 'r.')
@@ -373,13 +272,10 @@ def plotting(g):
     # print('Exponent power-law for eigen vs weight: ', z[0])
     plt.plot(keys21, y1, 'r.', label=z[0], mfc='none')
 
-
-
     # Legend of plot for showing coefficients of each least square regression line
     legend = plt.legend(title='Slope',loc='upper right')
     legend.get_frame()
     plt.show()
-
 
     #-----------Task-1-iii--------------------------#
 
@@ -391,7 +287,6 @@ def plotting(g):
     plt.xlabel('Degree')
     plt.ylabel('Fraction of nodes')
 
-    
     logkey = []
     logval = []
     leng = len(keys)
@@ -418,11 +313,6 @@ def plotting(g):
     
     # Power-law
     plt.plot(keys, y1, 'b.', label=z[0], mfc='none')
-
-
-
-
-
 
 
     #-----log-normal----- 
@@ -454,62 +344,11 @@ def plotting(g):
 
     legend = plt.legend(title='Slope', loc='upper right')
     legend.get_frame()
-    
-    #-----exp----------
-
-    """
-    
-    normkey=[]
-    loglogval = []
-    logx = []
-    rang =len(logkey)
-    for i in range(0,rang):
-        if logval[i]>=0 and keys[i]>0:
-            normkey.append((logkey[i]))
-            print("line571:",logval[i])
-            loglogval.append(np.math.log(logval[i]))
-            logx.append((keys[i]))
-    
-    print("line 574:",len(normkey))
-    print("line575:",len(loglogval))
-    z = np.polyfit(normkey, loglogval, 1) 
-    m= z[0]
-    a = z[1]
-    
-    y1 = []
-    for i in logx:
-        y1.append(a*np.math.exp(m*i))
-    
-    #exp
-    plt.plot(logx,y1,'y.',label=z[0],mfc='none')
-    
-    
-    """
-
     plt.show()
 
 
 
 def getTopPoints(v,e,ou):
-
-    # outofnorm = dict()
-    # length = len(x)
-    # for i in range(0,length):
-    #     if x[i] in outofnorm:
-    #         if outofnorm[x[i]] < ou[i]:
-    #             outofnorm[x[i]] = ou[i]
-    #     else:
-    #         outofnorm[x[i]] = ou[i]
-    #
-    # # print("source table values: ", sorted(source_table.values()))
-    # # print("source table: ", sorted(outofnorm.items(), key=itemgetter(1)))
-    # dictsorted = sorted(outofnorm.items(), key=itemgetter(1))
-    # dictsorted = dictsorted[-20:]
-    # k=[]
-    # v=[]
-    # for a,b in dictsorted:
-    #     k.append(a)
-    #     v.append(b)
 
     ou1 = sorted(ou)
     ou1 = ou1[-20:]
@@ -561,7 +400,6 @@ def lines():
     plt.xscale('log')
     plt.yscale('log')
 
-
     #square without one diagnol
     k = [1,2,4,10000]
     v = [2,4,8,20000]
@@ -594,7 +432,6 @@ def egonetwork(g):
 
         egonet_g = nx.Graph()
         adjlist = g.adj[node]
-
         neighofnode = []
         weight =0
 
@@ -602,7 +439,6 @@ def egonetwork(g):
             neighofnode.append(i)
             egonet_g.add_edge(node, i, weight=g[node][i]['weight'])
             weight = weight + g[node][i]['weight']
-
 
         #Adding edges for alter egos
         numof_c = len(neighofnode)
@@ -638,20 +474,13 @@ def egonetwork(g):
         w_u.append(weight)
 
 
-
     # Plotting
     plt.xscale('log')
     plt.yscale('log')
     plt.xlabel('Total number of nodes in each egonetwork')
     plt.ylabel('Total number of edges for corresponding nodes in egonetwork')
 
-
     plt.plot(v_u, e_u, 'b.')
-
-
-    # plt.show()
-
-
 
     #----------------- Task-2-(ii)----------------------#
 
@@ -691,15 +520,7 @@ def egonetwork(g):
             y1.append(y[i])
 
 
-
-    # plt.xscale('log')
-    # plt.yscale('log')
-
-    # plt.plot(bins, y, 'r.')
-    # z = np.polyfit(bins, y, 1)
-    # plt.plot(bins, np.polyval(z, bins), 'b.', label=z[0])
     plt.plot(x1, y1, 'y.',label='Median values')
-
 
     # Returns coefficient of power-law line
     logx1 = []
@@ -724,25 +545,9 @@ def egonetwork(g):
     # print('Exponent power-law for eigen vs weight: ', z[0])
     plt.plot(x1, y1, 'c.', label=z[0], mfc='none')
 
-
-
-    # legend = plt.legend(title="Slope of Least square regression line:", loc='upper right')
-    # legend.get_frame()
-    # plt.show()
-
-
-    #------Task-2-(iii)-----#
-    # Star
-    # plt.xscale('log')
-    # plt.yscale('log')
-
     k = [1, 2, 3, 10000]
     v = [0.1, 0.2, 0.3, 1000]
     p = np.polyfit(k, v, 1)
-    # plt.plot(k, np.polyval(p, k), 'm-', label=p[0])
-    # legend = plt.legend(loc='upper right')
-    # legend.get_frame()
-    # plt.show()
     plt.plot(k,v,'m-',label=1)
 
     # Clique
@@ -753,17 +558,11 @@ def egonetwork(g):
     k = [1, 2, 4, 10000]
     v = [1, 4, 16, 100000000]
 
-    # p = np.polyfit(k, v, 1)
-    # plt.plot(k, np.polyval(p, k), 'g-', label=p[0])
-    # legend = plt.legend(title='slope', loc='upper left')
-    # legend.get_frame()
     plt.plot(k,v,'g-',label=2)
     legend = plt.legend(title="Slope:", loc='upper right')
     legend.get_frame()
 
     plt.show()
-
-
 
     #-----Task-2-(iv)-------#
 
@@ -786,8 +585,6 @@ def egonetwork(g):
             logl_u.append(np.math.log10(l_u[i]))
             logw_u.append(np.math.log10(w_u[i]))
 
-
-
     # z = np.polyfit(v_u, e_u, 1)
     z = np.polyfit(logw_u, logl_u, 1)
     # Exponent or slope of power-law
@@ -803,8 +600,6 @@ def egonetwork(g):
     legend = plt.legend(title="Slope of Least square regression line:", loc='upper right')
     legend.get_frame()
     plt.show()
-
-
 
     # Plotting Powerlaw for Edges versus Nodes of ego network
     plt.xscale('log')
@@ -824,11 +619,6 @@ def egonetwork(g):
             logv_u.append(np.math.log10(v_u[i]))
             loge_u.append(np.math.log10(e_u[i]))
 
-    # for i in l_u:
-    #     logv_u.append(np.math.log10(i))
-    # for i in w_u:
-    #     loge_u.append(np.math.log10(i))
-
     z = np.polyfit(logv_u, loge_u, 1)
     # Exponent or slope of power-law
     m = z[0]
@@ -845,8 +635,6 @@ def egonetwork(g):
     plt.show()
 
     #--------(iii-i)----------------#
-
-
 
     plt.xscale('log')
     plt.yscale('log')
@@ -893,8 +681,6 @@ def egonetwork(g):
 
     #-------------3-(ii)------------------#
 
-
-
     plt.xscale('log')
     plt.yscale('log')
     plt.title('out-of-norm nodes')
@@ -913,10 +699,6 @@ def egonetwork(g):
         if l_u[i]>0:
             logl_u.append(np.math.log10(l_u[i]))
             logw_u.append(np.math.log10(w_u[i]))
-    # for i in l_u:
-    #     logl_u.append(np.math.log10(i))
-    # for i in w_u:
-    #     logw_u.append(np.math.log10(i))
 
     z = np.polyfit(logw_u, logl_u, 1)
     # print('exponent power-law for eigen vs weight: ', z[0])
@@ -940,9 +722,6 @@ def egonetwork(g):
     k, v = getTopPoints(w_u, l_u, ou_norm)
     plt.plot(k, v, 'gv')
     plt.show()
-
-
-
 
 
 #Task-4
@@ -974,15 +753,6 @@ def temporalgraph_ranking():
         num = numberofelems
         in_str = date
         in_time = timestamp1
-
-
-        #
-        # for i in range(0, num):
-        #     gg.add_edge(df_source[i], df_target[i])
-        # print("Nodes: ", len(gg.nodes()))
-        # total = len(gg.nodes())
-
-
 
         exp = []
         time = []
@@ -1016,14 +786,10 @@ def temporalgraph_ranking():
 
             else:
 
-
-
                 # Number of unique recipients
                 count = 0
-                # print(g.out_degree)
                 for i, j in g.out_degree:
                     count = count + j
-                # print(count)
 
                 # Number of mails
                 weight = 0
@@ -1033,15 +799,9 @@ def temporalgraph_ranking():
 
                 graph_signi1.append(weight)
                 graph_signi2.append(count)
-
-
-                # time_component.append(in_str)
                 time_component.append((in_time - timestamp1).days)
-
-
                 in_str = input_str
                 in_time = timestamp2
-
                 g = nx.DiGraph()
                 g.add_edge(elems[1], elems[2], weight=1)
 
@@ -1061,17 +821,13 @@ def temporalgraph_ranking():
                 significant_graph1.append(graph_signi2[index])
                 significant_time1.append(time_component[index])
 
-
-
             index = index+1
 
         plt.plot(significant_time,significant_graph,'r-')
-        # plt.show()
         sort_significant_time = []
         sort_significant_time1 = []
 
         ou1 = sorted(significant_graph,reverse=True)
-
         for i in ou1:
             j = significant_graph.index(i)
             sort_significant_time.append(significant_time[j])
