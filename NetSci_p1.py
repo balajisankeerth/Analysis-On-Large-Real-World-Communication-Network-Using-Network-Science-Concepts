@@ -18,7 +18,7 @@ def construct_Digraph():
 
     g = nx.DiGraph()
 
-    with open("/Users/sankeerthjagini/Documents/Studies/NetSci/Project/532projectdataset.txt") as file:
+    with open("532projectdataset.txt") as file:
         content = file.read().splitlines()
         numberofelems = len(content)
         for i in range(0, numberofelems):
@@ -40,7 +40,7 @@ def construct_Digraph():
 def construct_graph():
 
     g = nx.Graph()
-    with open("/Users/sankeerthjagini/Documents/Studies/NetSci/Project/532projectdataset.txt") as file:
+    with open("532projectdataset.txt") as file:
         content = file.read().splitlines()
         numberofelems = len(content)
         for i in range(0, numberofelems):
@@ -733,7 +733,7 @@ def temporalgraph_ranking():
     gg = nx.DiGraph()
 
 
-    with open("/Users/sankeerthjagini/Documents/Studies/NetSci/Project/532projectdataset.txt") as file:
+    with open("532projectdataset.txt") as file:
 
         content = file.read().splitlines()
         numberofelems = len(content)
